@@ -15,7 +15,7 @@ elasticsearch.hosts: ["https://elasticsearch:9200"]
 
 # บัญชีระบบหลังบ้าน
 elasticsearch.username: "kibana_system"
-elasticsearch.password: "P@ssw0rd" 
+elasticsearch.password: "${ELASTICSEARCH_PASSWORD}" 
 
 # ตรวจสอบเซิร์ตฝั่ง Elasticsearch
 elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca.crt"]

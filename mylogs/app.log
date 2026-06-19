@@ -1,0 +1,30 @@
+2026-06-19 13:30:01 [INFO] [com.auth.service] User admin_test successfully logged in from IP 192.168.1.45
+2026-06-19 13:30:05 [INFO] [com.payment.gateway] Initiating checkout process for Transaction ID: TXN-998321
+2026-06-19 13:30:06 [INFO] [com.inventory.manager] Checking stock allocation for Product ID: PROD-7721
+2026-06-19 13:30:08 [WARN] [com.database.pool] Database connection pool usage reached 82%. Scaling up active connections.
+2026-06-19 13:30:12 [INFO] [com.payment.gateway] Payment authorized successfully for TXN-998321 via VISA
+2026-06-19 13:30:15 [INFO] [com.order.processing] Order order_id_55041 created and queued for shipment
+2026-06-19 13:31:22 [INFO] [com.api.router] GET /api/v1/products/search status=200 duration=45ms user_agent="Mozilla/5.0"
+2026-06-19 13:31:40 [WARN] [com.api.router] GET /api/v1/user/profile status=404 duration=12ms response="User not found"
+2026-06-19 13:32:01 [INFO] [com.auth.service] Session extended for user token_idx_9921a
+2026-06-19 13:32:15 [ERROR] [com.payment.gateway] Payment declined for Transaction ID: TXN-998322. Reason: Insufficient Funds
+2026-06-19 13:33:05 [INFO] [com.api.router] POST /api/v1/cart/add status=201 duration=88ms
+2026-06-19 13:33:10 [WARN] [com.network.http] External API gateway (shipping-provider.service) responded with latency 2500ms
+2026-06-19 13:34:18 [INFO] [com.inventory.manager] Stock replenished for Product ID: PROD-7721 (Quantity: +500)
+2026-06-19 13:35:00 [INFO] [com.system.cron] Scheduled background job 'clear_expired_sessions' started
+2026-06-19 13:35:02 [INFO] [com.system.cron] Scheduled background job completed. Cleaned up 142 expired sessions.
+2026-06-19 13:36:11 [INFO] [com.auth.service] User dev_team_alpha requested password reset link
+2026-06-19 13:37:45 [ERROR] [com.database.pool] Connection timeout while attempting to connect to read-replica-01.internal
+2026-06-19 13:37:46 [WARN] [com.database.pool] Database primary took over read requests due to replica failure
+2026-06-19 13:38:02 [INFO] [com.api.router] GET /api/v1/dashboard/metrics status=200 duration=120ms
+2026-06-19 13:39:15 [INFO] [com.notification.sms] OTP token sent to mobile country_code=+66 user_id=8831
+2026-06-19 13:40:22 [WARN] [com.auth.service] Brute force protection triggered for IP 203.0.113.5. 3 failed login attempts.
+2026-06-19 13:40:23 [INFO] [com.auth.service] Temporary IP ban enforced for 203.0.113.5 (Duration: 15 minutes)
+2026-06-19 13:41:05 [INFO] [com.api.router] GET /api/v1/health status=200 duration=5ms
+2026-06-19 13:42:19 [INFO] [com.order.processing] Shipment tracking webhook received: Status=In_Transit carrier=Kerry
+2026-06-19 13:43:55 [ERROR] [com.upload.service] Failed to upload user avatar index_img_4.png. Error: Storage quota exceeded
+2026-06-19 13:44:12 [INFO] [com.api.router] PUT /api/v1/user/settings status=200 duration=32ms
+2026-06-19 13:45:00 [INFO] [com.system.cron] Scheduled background job 'generate_daily_report' started
+2026-06-19 13:45:10 [INFO] [com.report.generator] Daily analytical report generated. Size: 4.2MB path=/exports/reports/
+2026-06-19 13:46:22 [WARN] [com.cache.redis] Cache eviction rate increased. Current memory usage at 91% of allocated max
+2026-06-19 13:47:01 [INFO] [com.auth.service] User admin_test logged out safely. Session closed.
