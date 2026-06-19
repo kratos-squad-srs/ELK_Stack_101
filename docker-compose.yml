@@ -13,20 +13,20 @@ services:
       - "ES_JAVA_OPTS=${ES_JAVA_OPTS}"
       # [Security]: เปิดระบบ HTTPS ภายใน และผูกใบรับรองความปลอดภัย
       # เปิดหลัง Gen Cert  
-      - xpack.security.enabled=true
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.client_authentication=required
+      # - xpack.security.enabled=true
+      # - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      # - xpack.security.http.ssl.enabled=true
+      # - xpack.security.http.ssl.client_authentication=required
       
       # เปิดเพื่อ Gen cert
-      # - xpack.security.enabled=false
-      # - xpack.security.http.ssl.enabled=false
-      # - xpack.security.http.ssl.client_authentication=none
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.http.ssl.client_authentication=none
 
       # ปิดเพื่อ Gen cert ก่อน เปิดหลัง Gen Cert  
-      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
-      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
-      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca.crt
+      # - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
+      # - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
+      # - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca.crt
     ulimits:
       memlock:
         soft: -1
