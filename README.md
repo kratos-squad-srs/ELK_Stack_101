@@ -82,7 +82,7 @@ docker compose up -d
 
 
 12. กำหนดรหัสผ่าให้กับ kibana_system และ logstash_system
-docker compose exec -it elasticsearch curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" \  
+docker compose exec -it elasticsearch curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" \
   --cacert /usr/share/elasticsearch/config/certs/ca.crt \
   --cert /usr/share/elasticsearch/config/certs/elasticsearch.crt \
   --key /usr/share/elasticsearch/config/certs/elasticsearch.key \
