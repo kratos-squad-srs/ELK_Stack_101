@@ -1,5 +1,5 @@
 # =====================================================================
-# KIBANA FULL CONFIGURATION (kibana.yml)
+# KIBANA FULL CONFIGURATION (kibana.yml) - FINAL FIXED
 # =====================================================================
 
 server.port: 5601
@@ -13,12 +13,16 @@ server.ssl.key: "/usr/share/kibana/config/certs/kibana.key"
 # [หลังบ้าน] การเชื่อมต่อระหว่าง Kibana -> Elasticsearch 
 elasticsearch.hosts: ["https://elasticsearch:9200"]
 
-# จุดสำคัญ: ต้องใส่รหัสผ่านตัวจริงตรงๆ เท่านั้น (ห้ามใช้ ${})
+# บัญชีระบบหลังบ้าน
 elasticsearch.username: "kibana_system"
 elasticsearch.password: "P@ssw0rd" 
 
-# ยื่นเซิร์ตหลังบ้านให้ผ่านประตูด่านตรวจ HTTPS ของ Elasticsearch
+# ตรวจสอบเซิร์ตฝั่ง Elasticsearch
 elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca.crt"]
 
-# บังคับตรวจสอบชื่อโดเมนใบเซิร์ตหลังบ้านเพื่อความปลอดภัยขั้นสุด
-elasticsearch.ssl.verificationMode: "full"
+elasticsearch.ssl.certificate: "/usr/share/kibana/config/certs/kibana.crt"
+elasticsearch.ssl.key: "/usr/share/kibana/config/certs/kibana.key"
+elasticsearch.ssl.alwaysPresentCertificate: true
+
+# เลี่ยงปัญหา IP คอนเทนเนอร์ไม่ตรงกับชื่อจดทะเบียนใน SAN
+elasticsearch.ssl.verificationMode: "certificate"
