@@ -1,0 +1,24 @@
+# =====================================================================
+# KIBANA FULL CONFIGURATION (kibana.yml)
+# =====================================================================
+
+server.port: 5601
+server.host: "0.0.0.0"
+
+# [หน้าบ้าน] เปิดใช้งาน HTTPS สำหรับเว็บบราวเซอร์คุยกับ Kibana UI
+server.ssl.enabled: true
+server.ssl.certificate: "/usr/share/kibana/config/certs/kibana.crt"
+server.ssl.key: "/usr/share/kibana/config/certs/kibana.key"
+
+# [หลังบ้าน] การเชื่อมต่อระหว่าง Kibana -> Elasticsearch 
+elasticsearch.hosts: ["https://elasticsearch:9200"]
+
+# จุดสำคัญ: ต้องใส่รหัสผ่านตัวจริงตรงๆ เท่านั้น (ห้ามใช้ ${})
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "P@ssw0rd" 
+
+# ยื่นเซิร์ตหลังบ้านให้ผ่านประตูด่านตรวจ HTTPS ของ Elasticsearch
+elasticsearch.ssl.certificateAuthorities: ["/usr/share/kibana/config/certs/ca.crt"]
+
+# บังคับตรวจสอบชื่อโดเมนใบเซิร์ตหลังบ้านเพื่อความปลอดภัยขั้นสุด
+elasticsearch.ssl.verificationMode: "full"

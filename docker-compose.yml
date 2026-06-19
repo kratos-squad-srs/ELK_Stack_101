@@ -1,0 +1,100 @@
+services:
+  # =====================================================================
+  # ELASTICSEARCH (ฐานข้อมูลหลักและการเสิร์ช)
+  # =====================================================================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=${CLUSTER_NAME}
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=${ES_JAVA_OPTS}"
+      # [Security]: เปิดระบบ HTTPS ภายใน และผูกใบรับรองความปลอดภัย
+      # เปิดหลัง Gen Cert  
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.client_authentication=required
+      
+      # เปิดเพื่อ Gen cert
+      # - xpack.security.enabled=false
+      # - xpack.security.http.ssl.enabled=false
+      # - xpack.security.http.ssl.client_authentication=none
+
+      # ปิดเพื่อ Gen cert ก่อน เปิดหลัง Gen Cert  
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca.crt
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch-config/certs:/usr/share/elasticsearch/config/certs:ro
+      - esdata101:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+  # =====================================================================
+  # LOGSTASH (โรงงานแปรรูปข้อมูลและหั่นคำ Grok Parser)
+  # =====================================================================
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    container_name: logstash
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.hosts=https://elasticsearch:9200
+      - xpack.monitoring.elasticsearch.username=logstash_system
+      - xpack.monitoring.elasticsearch.password=${LOGSTASH_SYSTEM_PASSWORD}
+      # เทคนิคพิเศษ: ส่งผ่านตัวแปรความลับทะลุกำแพงเข้าไปให้โค้ดข้างในไฟล์ logstash.conf เรียกใช้ได้
+      - LOGSTASH_WRITER_USER=${LOGSTASH_WRITER_USER}
+      - LOGSTASH_WRITER_PASSWORD=${LOGSTASH_WRITER_PASSWORD}
+    volumes:
+      # ผูกยกโฟลเดอร์ย่อยเพื่อให้ตรงล็อคกลไกภายในของตู้ Logstash ตัวจริง
+      - ./logstash-config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      - ./logstash-config/certs:/usr/share/logstash/config/certs:ro
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+
+  # =====================================================================
+  # KIBANA (หน้าจอ UI ส่องผลและวิเคราะห์ข้อมูล)
+  # =====================================================================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
+    environment:
+      # ใช้ตัวแปรชื่อนี้ (เป็นมาตรฐานสากลของ Kibana) ดึงค่าจาก .env ส่งเข้าแอปพลิเคชันโดยตรง
+      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+    volumes:
+      - ./kibana-config/certs:/usr/share/kibana/config/certs:ro
+      - ./kibana-config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  # =====================================================================
+  # FILEBEAT (มดงานฝั่งส่งพัสดุ ดักส่องไฟล์ Log ต้นทาง)
+  # =====================================================================
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat-config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat-config/certs:/usr/share/filebeat/config/certs:ro
+      # ดึงพาธเก็บล็อกมาจากเครื่อง Mac ผ่านตัวแปรสภาพแวดล้อมสากลที่เราตั้งไว้
+      - ${MAC_LOGS_PATH}:/usr/share/filebeat/logs:ro
+      - fb101_data:/usr/share/filebeat/data
+    depends_on:
+      - logstash
+
+volumes:
+  esdata101:
+    driver: local
+  fb101_data:
+    driver: local

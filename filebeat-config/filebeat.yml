@@ -1,0 +1,17 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /usr/share/filebeat/logs/app.log # จุดดักส่องไฟล์ log ดิบภายในตู้
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  
+  # 🔒 เปิดม่านระบบความปลอดภัยเครือข่ายป้องกันการดักฟัง
+  ssl.enabled: true
+  ssl.verification_mode: "full"
+  ssl.certificate_authorities: ["/usr/share/filebeat/config/certs/ca.crt"]
+  
+  # mTLS: แนบใบรับรองตนเองเพื่อขอกุญแจผ่านประตู Logstash
+  ssl.certificate: "/usr/share/filebeat/config/certs/filebeat.crt"
+  ssl.key: "/usr/share/filebeat/config/certs/filebeat.key"
